@@ -9,7 +9,8 @@ exports.signup = (req, res, next) => {
       .then(hash => {
         const user = new User({
           email: req.body.email,
-          password: hash
+          password: hash,
+          type: req.body.type
         });
         user.save()
           .then(() => res.status(201).json({ message: 'Utilisateur créé !' }))
@@ -35,7 +36,8 @@ exports.login = (req, res, next) => {
                             { userId: user._id },
                             'RANDOM_TOKEN_SECRET',
                             { expiresIn: '24h' }
-                        )
+                        ),
+                        type: user.type
                     });
                 })
                 .catch(error => res.status(500).json({ error }));
